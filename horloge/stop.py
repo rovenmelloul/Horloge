@@ -1,11 +1,11 @@
 from pynput import keyboard
-import threading
+from threading import Thread
 
 
-class MyThread(threading.Thread):
+class InputChecker(Thread):
     def __init__(self):
         super().__init__()
-        self.on = False  # définition de l'état
+        self.on = False  # state 
 
     def run(self):
         print("\"Q\" pour activer et désactiver")
@@ -26,5 +26,5 @@ class MyThread(threading.Thread):
             listener.join()
 
 
-thread = MyThread()
+thread = InputChecker()
 thread.start()

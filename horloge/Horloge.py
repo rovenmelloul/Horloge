@@ -12,25 +12,28 @@ class Horloge:
 
     regled_alarm:tuple
     set_timer:bool
+    mode:str
     #Type of class variables
     # 
     # 
     def __init__(self)->None:
         self.set_timer = True
+        self.mode = ""
         pass
 
     #TODO:make it private
     def take_all_inputs(self)->tuple:
         try:
+            self.mode = input("Mode d'affichage : ") 
             afficher_heure = (
-                int(input("choisir heure : ")),
-                int(input("choisir minute : ")),
-                int(input("choisir seconde : ")))
+                int(input("Configurer votre Horloge : ")),
+                int(input("Configurer votre Horloge : ")),
+                int(input("Configurer votre Horloge : ")))
             self.hour,self.minute,self.seconds = afficher_heure
             regler_alarme = (
-                int(input("choisir heure : ")),
-                int(input("choisir minute : ")),
-                int(input("choisir seconde : ")))
+                int(input("Configurer votre alarme : ")),
+                int(input("Configurer votre alarme : ")),
+                int(input("Configurer votre alarme : ")))
             self.regled_alarm = regler_alarme
             return regler_alarme
         except ValueError:
@@ -42,18 +45,15 @@ class Horloge:
     def wait_for_options()->None:
         pass
 
-    def change_mode(self, mode):
+    def change_mode(self):
         copy_ = self.hour
-        if mode == "PM/AM":
+        if self.mode == "PM/AM":
             if copy_ <= 12:
                 suffixe = "AM"
             else:
                 copy_ = self.hour-12
                 suffixe = "PM"
             print(f"Time now: {copy_:02d}:{self.minute:02d}{suffixe}")
-            
-        else:
-            print(self.hour, "h", self.minute, "m", self.seconds, "s")
             print(f"""
                         ┌──────────────────────────┐
                         │      !!! ALARM !!!       │
@@ -70,6 +70,10 @@ class Horloge:
                         │    Press ENTER to stop   │
                         └──────────────────────────┘
     """)
+            time.sleep(1)
+        else:
+            print(self.hour, "h", self.minute, "m", self.seconds, "s")
+            
             time.sleep(1)
 
     def set_time(self):
@@ -93,10 +97,10 @@ class Horloge:
         pass 
 
     # This function start counting time and have all main logic 
-    def start_main_loop(self)->function:
+    def start_main_loop(self):
         while self.set_timer is True:
 
-            self.change_mode("")
+            self.change_mode()
             if self.regled_alarm[0] == self.hour and  self.regled_alarm[1] == self.minute and  self.regled_alarm[2] == self.seconds:
                     print("alarme sonne")
             if self.seconds < 60:
