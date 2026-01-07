@@ -1,4 +1,5 @@
 import simpleaudio as sa
+import time
 
 class Horloge: 
     """
@@ -25,22 +26,51 @@ class Horloge:
                 int(input("choisir heure : ")),
                 int(input("choisir minute : ")),
                 int(input("choisir seconde : ")))
-            print("")
+            self.hour,self.minute,self.seconds = afficher_heure
             regler_alarme = (
                 int(input("choisir heure : ")),
                 int(input("choisir minute : ")),
                 int(input("choisir seconde : ")))
+            self.regled_alarm = regler_alarme
             return regler_alarme
         except ValueError:
             print("Nombres uniquement")
+            self.regled_alarm = (0,0,0)
             return (0,0,0)
         pass
 
     def wait_for_options()->None:
         pass
 
-    def change_mode(self):
-        pass
+    def change_mode(self, mode):
+        copy_ = self.hour
+        if mode == "PM/AM":
+            if copy_ <= 12:
+                suffixe = "AM"
+            else:
+                copy_ = self.hour-12
+                suffixe = "PM"
+            print(f"Time now: {copy_:02d}:{self.minute:02d}{suffixe}")
+            
+        else:
+            print(self.hour, "h", self.minute, "m", self.seconds, "s")
+            print(f"""
+                        ┌──────────────────────────┐
+                        │      !!! ALARM !!!       │
+                        │      !!! ALARM !!!       │
+                        │                          │
+                        │     ████  ██  ████  ████ │
+                        │   ██      ██ ██    ██    │
+                        │     ██    ██  ████  ████ │
+                        │       ██  ██     ██    ██│
+                        │     ████  ██  ████  ████ │
+                        │                          │
+                        │{self.hour}:{self.minute} AM   │
+                        │                          │
+                        │    Press ENTER to stop   │
+                        └──────────────────────────┘
+    """)
+            time.sleep(1)
 
     def set_time(self):
         pass
@@ -65,11 +95,23 @@ class Horloge:
     # This function start counting time and have all main logic 
     def start_main_loop(self)->function:
         while self.set_timer is True:
-            self.seconds += 1
-            
-            pass
+
+            self.change_mode("")
+            if self.regled_alarm[0] == self.hour and  self.regled_alarm[1] == self.minute and  self.regled_alarm[2] == self.seconds:
+                    print("alarme sonne")
+            if self.seconds < 60:
+                self.seconds += 1  
+            else:
+                self.seconds = 0
+                self.minute +=1
+            if self.minute == 60:
+                self.minute = 0
+                self.hour += 1
+                if self.hour == 24:
+                    self.hour = 0
         pass
 
 
 h = Horloge()
 h.take_all_inputs()
+h.start_main_loop()
