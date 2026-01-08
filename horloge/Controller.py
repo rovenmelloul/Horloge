@@ -1,11 +1,12 @@
 from pynput import keyboard
-import threading
+from .Horloge import Horloge
+from threading import Thread, Event
 
-
-class MyThread(threading.Thread):
-    def __init__(self):
-        super().__init__()
+class InputChecker(Thread):
+    def __init__(self,horloge:Horloge):
+        super().__init__() #heritage for 
         self.on = False  # définition de l'état
+        self.horloge = horloge
 
     def run(self):
         print("\"Q\" pour activer et désactiver")
@@ -17,6 +18,11 @@ class MyThread(threading.Thread):
                     self.on = not self.on  # interupteur
                     state = "activer" if self.on else "desactiver"
                     print(f" état: {state}")
+                    if self.horloge.set_timer.is_set():
+                        self.horloge.set_timer.clear()  # pquse
+                    else:
+                        self.horloge.set_timer.set() 
+                    print("Alarm was stopped")
             except AttributeError:
                 if key == keyboard.Key.esc:
                     print("arrêt...")
@@ -25,6 +31,3 @@ class MyThread(threading.Thread):
         with keyboard.Listener(on_press=on_press) as listener:
             listener.join()
 
-
-thread = MyThread()
-thread.start()
