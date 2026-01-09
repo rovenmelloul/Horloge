@@ -77,6 +77,25 @@ class Horloge(Thread):
     """)
             time.sleep(1)
         else:
+            print(f"""
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║                       ⏰  C L O C K  ⏰                      ║
+║                                                              ║
+║      ██████╗ ██╗      ██████╗  ██████╗ ██╗  ██╗              ║
+║     ██╔════╝ ██║     ██╔═══██╗██╔════╝ ██║ ██╔╝              ║
+║     ██║      ██║     ██║   ██║██║      █████╔╝               ║
+║     ██║      ██║     ██║   ██║██║      ██╔═██╗               ║
+║     ╚██████╗ ███████╗╚██████╔╝╚██████╗ ██║  ██╗              ║
+║      ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝              ║
+║                                                              ║
+║                 {self.hour}:{self.minute}:{self.seconds}                                      ║
+║                                                              ║
+║               Press ENTER to open alarm menu                 ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+    """)
             print(self.hour, "h", self.minute, "m", self.seconds, "s")
             
             time.sleep(1)
@@ -103,7 +122,7 @@ class Horloge(Thread):
         pass
 
     def play_sound(self):
-        wave_obj = sa.WaveObject.from_wave_file("C:/Users/woter/LaPlateforme/Horloge/horloge/alarm-clock-1-29480.wav")
+        wave_obj = sa.WaveObject.from_wave_file("Horloge/horloge/alarm-clock-1-29480.wav")
         play_obj = wave_obj.play()
         play_obj.wait_done()
         pass 
@@ -115,6 +134,7 @@ class Horloge(Thread):
             self.change_mode()
             if self.regled_alarm[0] == self.hour and  self.regled_alarm[1] == self.minute and  self.regled_alarm[2] == self.seconds:
                     print("alarme sonne")
+                    self.play_sound()
             if self.seconds < 60:
                 self.seconds += 1  
             else:
