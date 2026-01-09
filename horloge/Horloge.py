@@ -2,6 +2,7 @@ import simpleaudio as sa
 import time
 from datetime import datetime
 from threading import Thread, Event
+import os
 
 class Horloge(Thread): 
     """
@@ -47,6 +48,13 @@ class Horloge(Thread):
             return (0,0,0)
         pass
 
+    def clear_screen(self):
+        """Clear the terminal screen (cross-platform)"""
+        if os.name == 'nt':           # Windows
+            os.system('cls')
+        else:                         # Linux, macOS, etc.
+            os.system('clear')
+
     def change_mode(self):
         copy_ = self.hour
         if self.mode == "PM/AM":
@@ -55,6 +63,7 @@ class Horloge(Thread):
             else:
                 copy_ = self.hour-12
                 suffixe = "PM"
+            self.clear_screen()
             print(f"Time now: {copy_:02d}:{self.minute:02d}{suffixe}")
             print(f"""
 ╔══════════════════════════════════════════════════════════════╗
@@ -77,6 +86,7 @@ class Horloge(Thread):
     """)
             time.sleep(1)
         else:
+            self.clear_screen()
             print(f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
@@ -89,7 +99,7 @@ class Horloge(Thread):
 ║     ╚██████╗ ███████╗╚██████╔╝╚██████╗ ██║  ██╗              ║
 ║      ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝              ║
 ║                                                              ║
-║                 {self.hour}:{self.minute}:{self.seconds}                                      ║
+║                 {self.hour}:{self.minute}:{self.seconds}                                       ║
 ║                                                              ║
 ║               Press ENTER to open alarm menu                 ║
 ║                                                              ║
@@ -122,7 +132,9 @@ class Horloge(Thread):
         pass
 
     def play_sound(self):
-        wave_obj = sa.WaveObject.from_wave_file("Horloge/horloge/alarm-clock-1-29480.wav")
+        SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+        alarm_path = os.path.join(SCRIPT_DIR, "alarm-clock-1-29480.wav")
+        wave_obj = sa.WaveObject.from_wave_file(alarm_path)
         play_obj = wave_obj.play()
         play_obj.wait_done()
         pass 
